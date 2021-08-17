@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NASA Application</string>
+    <string name="space_image">Space Image</string>
+    <string name="error_loading_nasa">There was an Error Loading Nasa: %1$s</string>
+    <string name="swipe_to_refresh">Swipe To Refresh</string>
+    <string name="close">X</string>
+</resources>
