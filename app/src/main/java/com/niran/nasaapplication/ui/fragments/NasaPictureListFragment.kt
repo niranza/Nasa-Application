@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.niran.nasaapplication.R
 import com.niran.nasaapplication.adapters.NasaPictureAdapter
 import com.niran.nasaapplication.databinding.FragmentNasaListBinding
@@ -14,6 +15,8 @@ import com.niran.nasaapplication.dataset.models.NasaPicture
 import com.niran.nasaapplication.utils.FragmentUtils.Companion.nasaViewModel
 import com.niran.nasaapplication.utils.FragmentUtils.Companion.showSwipeToRefreshSnackBar
 import com.niran.nasaapplication.utils.Resource
+import com.niran.nasaapplication.utils.SharedPrefUtil.Companion.getSharedPrefBoolean
+import com.niran.nasaapplication.utils.SharedPrefUtil.Companion.setSharedPrefBoolean
 
 
 class NasaPictureListFragment : Fragment() {
@@ -21,9 +24,11 @@ class NasaPictureListFragment : Fragment() {
     private var _binding: FragmentNasaListBinding? = null
     private val binding get() = _binding!!
 
-    private var swipePopUpShowed = false
-
     private val viewModel by lazy { nasaViewModel() }
+
+    private var showSwipePopUp = false
+
+    private var swipeToRefreshSnackBar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +36,8 @@ class NasaPictureListFragment : Fragment() {
     ): View {
 
         _binding = FragmentNasaListBinding.inflate(inflater)
+
+        loadShowSwipePopUp()
 
         return binding.root
     }
@@ -48,7 +55,10 @@ class NasaPictureListFragment : Fragment() {
 
             rvNasa.adapter = nasaPictureAdapter
 
-            layoutRefreshPictures.setOnRefreshListener { viewModel.getNasaRandomPictures() }
+            layoutRefreshPictures.setOnRefreshListener {
+                viewModel.getNasaRandomPictures()
+                saveShowSwipePopUp(false)
+            }
 
             viewModel.nasa.observe(viewLifecycleOwner) { nasaListResponse ->
                 when (nasaListResponse) {
@@ -60,9 +70,7 @@ class NasaPictureListFragment : Fragment() {
                         hideLoadingProgressBar()
                         showSwipeToRefreshPopUp()
                         nasaListResponse.data?.let { nasaList ->
-                            nasaPictureAdapter.submitList(
-                                nasaList
-                            )
+                            nasaPictureAdapter.submitList(nasaList)
                         }
                     }
                     is Resource.Error -> {
@@ -74,12 +82,13 @@ class NasaPictureListFragment : Fragment() {
         }
     }
 
-    private fun showSwipeToRefreshPopUp() = binding.apply {
-        if (!swipePopUpShowed) {
-            showSwipeToRefreshSnackBar()
-            swipePopUpShowed = true
+    private fun showSwipeToRefreshPopUp() {
+        if (showSwipePopUp) {
+            swipeToRefreshSnackBar = showSwipeToRefreshSnackBar { saveShowSwipePopUp(false) }
         }
     }
+
+    private fun hideSwipeSnackBar() = swipeToRefreshSnackBar?.dismiss()
 
     private fun hideLoadingProgressBar() = binding.apply {
         pbLoading.visibility = View.GONE
@@ -96,6 +105,23 @@ class NasaPictureListFragment : Fragment() {
             NasaPictureListFragmentDirections
                 .actionNasaListFragmentToNasaPictureFragment(nasaPicture, null)
         )
+
+    private fun loadShowSwipePopUp() = requireContext().getSharedPrefBoolean(
+        R.string.nasa_picture_list_fragment_file_key,
+        R.string.show_swipe_snack_bar_pref_key,
+        true
+    ).also { showSwipePopUp = it }
+
+    @Suppress("SameParameterValue")
+    private fun saveShowSwipePopUp(boolean: Boolean) {
+        if (showSwipePopUp == boolean) return
+        requireContext().setSharedPrefBoolean(
+            R.string.nasa_picture_list_fragment_file_key,
+            R.string.show_swipe_snack_bar_pref_key,
+            boolean
+        ).also { showSwipePopUp = boolean }
+        hideSwipeSnackBar()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -59,13 +59,15 @@ class NasaPictureFragment : Fragment() {
         setOnClickListener {
             viewModel.insertNasaPicture(nasaPicture)
             showSavedSuccessfullySnackBar()
+            visibility = View.GONE
         }
     }
 
     private fun hideSavedFab() = binding.apply { fabSaveImage.visibility = View.GONE }
 
     private fun showSavedSuccessfullySnackBar() = binding.apply {
-        Snackbar.make(root, R.string.saved_successfully, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(layoutSnackBarBottom, R.string.saved_successfully, Snackbar.LENGTH_SHORT)
+            .show()
     }
 
     override fun onDestroyView() {

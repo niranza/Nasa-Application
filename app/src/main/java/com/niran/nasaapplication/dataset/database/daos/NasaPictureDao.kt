@@ -16,4 +16,6 @@ interface NasaPictureDao {
     @Delete
     suspend fun deleteNasaPicture(nasaPicture: NasaPicture)
 
+    @Query("DELETE FROM nasa_picture_table")
+    suspend fun deleteAllNasaPictures()
 }

@@ -35,6 +35,9 @@ class NasaViewModel(private val repository: NasaRepository) : ViewModel() {
 
     fun deleteNasaPicture(nasaPicture: NasaPicture) =
         viewModelScope.launch { repository.deleteNasaPicture(nasaPicture) }
+
+    fun deleteAllSavedNasaPictures() =
+        viewModelScope.launch { repository.deleteAllSavedNasaPictures() }
 }
 
 class NasaViewModelFactory(private val repository: NasaRepository) : ViewModelProvider.Factory {

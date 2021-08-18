@@ -7,7 +7,7 @@
     tools:context=".ui.fragments.NasaPictureListFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/layout_snack_bar"
+        android:id="@+id/layout_snack_bar_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_snack_bar">
+        app:layout_constraintTop_toBottomOf="@id/layout_snack_bar_top">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

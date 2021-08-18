@@ -1,4 +1,10 @@
 <resources>
+
+    <!--region BoilerPlate Strings-->
+    <string name="nasa_picture_list_fragment_file_key">NasaPictureListFragment</string>
+    <string name="show_swipe_snack_bar_pref_key">showSwipeSnackBar</string>
+    <!--endregion BoilerPlate Strings-->
+
     <string name="app_name">NASA Application</string>
     <string name="space_image">Space Image</string>
     <string name="error_loading_nasa">There was an Error Loading Nasa: %1$s</string>
@@ -9,4 +15,10 @@
     <string name="saved_pictures">Saved Pictures</string>
     <string name="nasa_pictures">Nasa Pictures</string>
     <string name="you_have_no_images_yet">You have no images yet</string>
+    <string name="undo">UNDO</string>
+    <string name="picture_deleted">Picture Deleted</string>
+    <string name="delete_all_pictures">Delete All Pictures</string>
+    <string name="delete_all_pictures_title">Delete All Pictures?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
