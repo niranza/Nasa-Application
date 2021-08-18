@@ -14,5 +14,5 @@ class NasaRepository(private val api: NasaApi, private val dao: NasaPictureDao) 
 
     suspend fun deleteAllSavedNasaPictures() = dao.deleteAllNasaPictures()
 
-    suspend fun getNasaRandomPictures(count: Int) = api.getRandomNasaPictures(count)
+    suspend fun getRandomNasaPictures(count: Int) = api.getRandomNasaPictures(count)
 }

@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_nasa_list">
         <action
             android:id="@+id/action_nasaListFragment_to_nasaPictureFragment"
-            app:destination="@id/nasaPictureFragment" />
+            app:destination="@id/nasaPictureFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/nasaPictureFragment"
@@ -26,6 +30,13 @@
             android:name="fragmentTag"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_nasaPictureFragment_to_imagePreviewFragment"
+            app:destination="@id/imagePreviewFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/savedNasaPicturesFragment"
@@ -34,6 +45,20 @@
         tools:layout="@layout/fragment_saved_nasa_pictures">
         <action
             android:id="@+id/action_savedNasaPicturesFragment_to_nasaPictureFragment"
-            app:destination="@id/nasaPictureFragment" />
+            app:destination="@id/nasaPictureFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/imagePreviewFragment"
+        android:name="com.niran.nasaapplication.ui.fragments.ImagePreviewFragment"
+        android:label="Image"
+        tools:layout="@layout/fragment_image_preview" >
+        <argument
+            android:name="imageUrl"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

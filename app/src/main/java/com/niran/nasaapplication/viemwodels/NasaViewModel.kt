@@ -1,30 +1,36 @@
 package com.niran.nasaapplication.viemwodels
 
+import android.app.Application
 import androidx.lifecycle.*
 import com.niran.nasaapplication.dataset.models.NasaPicture
 import com.niran.nasaapplication.dataset.models.NasaRandomPictures
 import com.niran.nasaapplication.repositories.NasaRepository
-import com.niran.nasaapplication.utils.Constants.Companion.IMAGES_PER_PAGE
+import com.niran.nasaapplication.utils.Constants
+import com.niran.nasaapplication.utils.InternetUtil.Companion.safeRetrofitCall
 import com.niran.nasaapplication.utils.Resource
 import kotlinx.coroutines.launch
 
-class NasaViewModel(private val repository: NasaRepository) : ViewModel() {
+class NasaViewModel(
+    private val repository: NasaRepository,
+    app: Application
+) : AndroidViewModel(app) {
 
     private val _nasa = MutableLiveData<Resource<NasaRandomPictures>>()
     val nasa: LiveData<Resource<NasaRandomPictures>> get() = _nasa
 
     init {
-        getNasaRandomPictures()
+        getRandomNasaPictures()
     }
 
-    fun getNasaRandomPictures() = viewModelScope.launch {
-        _nasa.postValue(Resource.Loading())
-        repository.getNasaRandomPictures(IMAGES_PER_PAGE).apply {
-            if (isSuccessful) body()?.let { nasaList ->
-                _nasa.postValue(Resource.Success(nasaList))
-                return@launch
+    fun getRandomNasaPictures() = viewModelScope.launch {
+        _nasa.safeRetrofitCall(getApplication()) {
+            repository.getRandomNasaPictures(Constants.IMAGES_PER_PAGE).apply {
+                if (isSuccessful) body()?.let { nasaList ->
+                    _nasa.postValue(Resource.Success(nasaList))
+                    return@safeRetrofitCall
+                }
+                _nasa.postValue(Resource.Error(message()))
             }
-            _nasa.postValue(Resource.Error(message()))
         }
     }
 
@@ -40,12 +46,15 @@ class NasaViewModel(private val repository: NasaRepository) : ViewModel() {
         viewModelScope.launch { repository.deleteAllSavedNasaPictures() }
 }
 
-class NasaViewModelFactory(private val repository: NasaRepository) : ViewModelProvider.Factory {
+class NasaViewModelFactory(
+    private val repository: NasaRepository,
+    private val app: Application
+) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(NasaViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return NasaViewModel(repository) as T
+            return NasaViewModel(repository, app) as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class")
     }

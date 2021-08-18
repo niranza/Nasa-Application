@@ -21,7 +21,7 @@ class NasaActivity : AppCompatActivity() {
     private val binding get() = _binding!!
 
     val viewModel: NasaViewModel by viewModels {
-        NasaViewModelFactory((application as NasaApplication).nasaRepository)
+        NasaViewModelFactory((application as NasaApplication).nasaRepository, application)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
