@@ -5,6 +5,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.niran.nasaapplication.R
+import com.niran.nasaapplication.ui.NasaActivity
 
 class FragmentUtils {
     companion object {
@@ -15,5 +16,7 @@ class FragmentUtils {
                 show()
             }
         }
+
+        fun Fragment.nasaViewModel() = (activity as NasaActivity).viewModel
     }
 }

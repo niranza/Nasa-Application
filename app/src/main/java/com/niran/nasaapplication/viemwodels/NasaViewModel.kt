@@ -1,6 +1,7 @@
 package com.niran.nasaapplication.viemwodels
 
 import androidx.lifecycle.*
+import com.niran.nasaapplication.dataset.models.NasaPicture
 import com.niran.nasaapplication.dataset.models.NasaRandomPictures
 import com.niran.nasaapplication.repositories.NasaRepository
 import com.niran.nasaapplication.utils.Constants.Companion.IMAGES_PER_PAGE
@@ -26,6 +27,14 @@ class NasaViewModel(private val repository: NasaRepository) : ViewModel() {
             _nasa.postValue(Resource.Error(message()))
         }
     }
+
+    val nasaPictureListAsLiveData = repository.savedNasaPictureListWithFlow.asLiveData()
+
+    fun insertNasaPicture(nasaPicture: NasaPicture) =
+        viewModelScope.launch { repository.insertNasaPicture(nasaPicture) }
+
+    fun deleteNasaPicture(nasaPicture: NasaPicture) =
+        viewModelScope.launch { repository.deleteNasaPicture(nasaPicture) }
 }
 
 class NasaViewModelFactory(private val repository: NasaRepository) : ViewModelProvider.Factory {

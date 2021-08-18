@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NASAApplication"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.NasaActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

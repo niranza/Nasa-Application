@@ -6,27 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import com.niran.nasaapplication.NasaApplication
+import androidx.navigation.findNavController
 import com.niran.nasaapplication.R
-import com.niran.nasaapplication.adapters.NasaAdapter
+import com.niran.nasaapplication.adapters.NasaPictureAdapter
 import com.niran.nasaapplication.databinding.FragmentNasaListBinding
+import com.niran.nasaapplication.dataset.models.NasaPicture
+import com.niran.nasaapplication.utils.FragmentUtils.Companion.nasaViewModel
 import com.niran.nasaapplication.utils.FragmentUtils.Companion.showSwipeToRefreshSnackBar
 import com.niran.nasaapplication.utils.Resource
-import com.niran.nasaapplication.viemwodels.NasaViewModel
-import com.niran.nasaapplication.viemwodels.NasaViewModelFactory
 
 
-class NasaListFragment : Fragment() {
+class NasaPictureListFragment : Fragment() {
 
     private var _binding: FragmentNasaListBinding? = null
     private val binding get() = _binding!!
 
     private var swipePopUpShowed = false
 
-    private val viewModel: NasaViewModel by viewModels {
-        NasaViewModelFactory((activity?.application as NasaApplication).nasaRepository)
-    }
+    private val viewModel by lazy { nasaViewModel() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,9 +39,14 @@ class NasaListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
 
-            val nasaAdapter = NasaAdapter()
+            val nasaPictureAdapter =
+                NasaPictureAdapter(object : NasaPictureAdapter.NasaPictureClickHandler {
+                    override fun onNasaPictureClicked(nasaPicture: NasaPicture) {
+                        navigateToNasaPictureFragment(nasaPicture)
+                    }
+                })
 
-            rvNasa.adapter = nasaAdapter
+            rvNasa.adapter = nasaPictureAdapter
 
             layoutRefreshPictures.setOnRefreshListener { viewModel.getNasaRandomPictures() }
 
@@ -57,7 +59,11 @@ class NasaListFragment : Fragment() {
                     is Resource.Success -> {
                         hideLoadingProgressBar()
                         showSwipeToRefreshPopUp()
-                        nasaListResponse.data?.let { nasaList -> nasaAdapter.submitList(nasaList) }
+                        nasaListResponse.data?.let { nasaList ->
+                            nasaPictureAdapter.submitList(
+                                nasaList
+                            )
+                        }
                     }
                     is Resource.Error -> {
                         hideLoadingProgressBar()
@@ -84,6 +90,12 @@ class NasaListFragment : Fragment() {
         pbLoading.visibility = View.VISIBLE
         rvNasa.visibility = View.GONE
     }
+
+    private fun navigateToNasaPictureFragment(nasaPicture: NasaPicture) =
+        view?.findNavController()?.navigate(
+            NasaPictureListFragmentDirections
+                .actionNasaListFragmentToNasaPictureFragment(nasaPicture, null)
+        )
 
     override fun onDestroyView() {
         super.onDestroyView()

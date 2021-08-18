@@ -4,4 +4,9 @@
     <string name="error_loading_nasa">There was an Error Loading Nasa: %1$s</string>
     <string name="swipe_to_refresh">Swipe To Refresh</string>
     <string name="close">X</string>
+    <string name="save">Save</string>
+    <string name="saved_successfully">Image successfully saved</string>
+    <string name="saved_pictures">Saved Pictures</string>
+    <string name="nasa_pictures">Nasa Pictures</string>
+    <string name="you_have_no_images_yet">You have no images yet</string>
 </resources>

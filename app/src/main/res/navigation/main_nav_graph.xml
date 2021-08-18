@@ -7,7 +7,33 @@
 
     <fragment
         android:id="@+id/nasaListFragment"
-        android:name="com.niran.nasaapplication.ui.fragments.NasaListFragment"
-        android:label="fragment_nasa_list"
-        tools:layout="@layout/fragment_nasa_list" />
+        android:name="com.niran.nasaapplication.ui.fragments.NasaPictureListFragment"
+        android:label="Nasa Images"
+        tools:layout="@layout/fragment_nasa_list">
+        <action
+            android:id="@+id/action_nasaListFragment_to_nasaPictureFragment"
+            app:destination="@id/nasaPictureFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nasaPictureFragment"
+        android:name="com.niran.nasaapplication.ui.fragments.NasaPictureFragment"
+        android:label="Nasa Image"
+        tools:layout="@layout/fragment_nasa_picture">
+        <argument
+            android:name="nasaPicture"
+            app:argType="com.niran.nasaapplication.dataset.models.NasaPicture" />
+        <argument
+            android:name="fragmentTag"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/savedNasaPicturesFragment"
+        android:name="com.niran.nasaapplication.ui.fragments.SavedNasaPicturesFragment"
+        android:label="Saved Images"
+        tools:layout="@layout/fragment_saved_nasa_pictures">
+        <action
+            android:id="@+id/action_savedNasaPicturesFragment_to_nasaPictureFragment"
+            app:destination="@id/nasaPictureFragment" />
+    </fragment>
 </navigation>

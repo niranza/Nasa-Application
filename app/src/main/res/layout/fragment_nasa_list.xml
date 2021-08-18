@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.NasaListFragment">
+    tools:context=".ui.fragments.NasaPictureListFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/layout_snack_bar"

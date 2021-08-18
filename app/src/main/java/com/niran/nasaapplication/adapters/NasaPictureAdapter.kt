@@ -10,34 +10,45 @@ import com.niran.nasaapplication.R
 import com.niran.nasaapplication.databinding.NasaItemBinding
 import com.niran.nasaapplication.dataset.models.NasaPicture
 
-class NasaAdapter : ListAdapter<NasaPicture, NasaAdapter.NasaViewHolder>(NasaCallBack) {
+class NasaPictureAdapter(
+    private val nasaPictureClickHandler: NasaPictureClickHandler
+) : ListAdapter<NasaPicture, NasaPictureAdapter.NasaViewHolder>(NasaCallBack) {
 
     class NasaViewHolder private constructor(
-        private val binding: NasaItemBinding
+        private val binding: NasaItemBinding,
+        private val nasaPictureClickHandler: NasaPictureClickHandler
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(nasa: NasaPicture) = binding.apply {
-            ivNasaImage.load(nasa.hdurl) {
+            ivNasaImage.load(nasa.photoUrl) {
                 crossfade(true)
-                placeholder(R.drawable.ic_pending)
+                placeholder(R.drawable.loading_animation)
                 error(R.drawable.ic_broken_image)
             }
             tvNasaTitle.text = nasa.title
             tvNasaDate.text = nasa.date
             tvNasaExplanation.text = nasa.explanation
+            itemView.setOnClickListener { nasaPictureClickHandler.onNasaPictureClicked(nasa) }
         }
 
         companion object {
-            fun create(parent: ViewGroup): NasaViewHolder {
+            fun create(
+                parent: ViewGroup,
+                nasaPictureClickHandler: NasaPictureClickHandler
+            ): NasaViewHolder {
                 val binding = NasaItemBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
-                return NasaViewHolder(binding)
+                return NasaViewHolder(binding, nasaPictureClickHandler)
             }
         }
     }
 
+    interface NasaPictureClickHandler {
+        fun onNasaPictureClicked(nasaPicture: NasaPicture)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NasaViewHolder {
-        return NasaViewHolder.create(parent)
+        return NasaViewHolder.create(parent, nasaPictureClickHandler)
     }
 
     override fun onBindViewHolder(holder: NasaViewHolder, position: Int) {
